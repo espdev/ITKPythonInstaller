@@ -45,13 +45,13 @@ add_custom_target(copy_files ALL
 add_custom_target(pip_wheel ALL
     COMMAND ${PYTHON_EXECUTABLE} "-m" "pip" "wheel" "--wheel-dir" "${CMAKE_BINARY_DIR}/bin" "."
     WORKING_DIRECTORY "${DST_DIR}"
-    DEPENDS CopyFiles
+    DEPENDS copy_files
 )
 
 # Install package to python site-packages
 add_custom_target(pip_install ALL
     COMMAND ${PYTHON_EXECUTABLE} "-m" "pip" "install" "-U" "--force-reinstall" "--no-index" "--find-links" "${CMAKE_BINARY_DIR}/bin" "itk"
-    DEPENDS Wheel
+    DEPENDS pip_wheel
 )
 
 # Uninstall package from python site-packages
