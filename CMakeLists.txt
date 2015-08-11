@@ -59,6 +59,13 @@ add_custom_target(pip_uninstall
     COMMAND ${PYTHON_EXECUTABLE} "-m" "pip" "uninstall" "itk"
 )
 
+set(GLOB_COPY_FILES
+    "*.py"
+    "*.pyd"
+    "*.dll"
+    "*.so"
+)
+
 configure_file(
     ${CMAKE_SOURCE_DIR}/copy_files.py.in
     ${TARGET_DIR}/copy_files.py

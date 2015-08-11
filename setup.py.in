@@ -8,7 +8,7 @@ Setup script for ITK Python wrappings
 from setuptools import setup
 from setuptools.dist import Distribution
 
-__version__ = "@ITK_PACKAGE_VERSION@"
+__version__ = '@ITK_PACKAGE_VERSION@'
 
 long_description = """ITK is an open-source, cross-platform system that provides
 developers with an extensive suite of software tools for image analysis.
@@ -42,7 +42,7 @@ setup(
     packages=['itk'],
     include_package_data=True,
     package_data={
-        '': ['*.py', '*.pyd', '*.dll', '*.so'],
+        '': '@GLOB_COPY_FILES@'.split(';'),
         'itk': ['Configuration/*.py', '../itk.pth']
     },
     distclass=BinaryDistribution,

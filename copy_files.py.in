@@ -15,7 +15,7 @@ import itertools
 import multiprocessing
 
 
-GLOBS = ['*.py', '*.pyd', '*.dll', '*.so']
+GLOBS = '@GLOB_COPY_FILES@'.split(';')
 
 
 def copy_file(f):
