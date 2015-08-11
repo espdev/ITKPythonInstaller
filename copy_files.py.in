@@ -18,7 +18,7 @@ import multiprocessing
 GLOBS = ['*.py', '*.pyd', '*.dll', '*.so']
 
 
-def copy_files(f):
+def copy_file(f):
     src, dst = f
     dst_name = os.path.join(dst, os.path.basename(src))
 
@@ -40,4 +40,4 @@ if __name__ == '__main__':
         os.makedirs(target_dir)
 
     pool = multiprocessing.Pool()
-    pool.map(copy_files, all_files)
+    pool.map(copy_file, all_files)
