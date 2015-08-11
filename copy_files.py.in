@@ -1,0 +1,43 @@
+# coding=utf-8
+
+"""
+Copies specific files from a source directory to a destination directory
+
+"""
+
+from __future__ import print_function
+
+import sys
+import os
+import glob
+import shutil
+import itertools
+import multiprocessing
+
+
+GLOBS = ['*.py', '*.pyd', '*.dll', '*.so']
+
+
+def copy_files(f):
+    src, dst = f
+    dst_name = os.path.join(dst, os.path.basename(src))
+
+    print('Copying "{}" -> "{}"'.format(src, dst_name))
+    shutil.copy(src, dst)
+
+
+if __name__ == '__main__':
+    source_dir = sys.argv[1]
+    target_dir = sys.argv[2]
+
+    all_files = []
+
+    for g in GLOBS:
+        files = glob.glob(os.path.join(source_dir, g))
+        all_files.extend(zip(files, itertools.repeat(target_dir)))
+
+    if not os.path.isdir(target_dir):
+        os.makedirs(target_dir)
+
+    pool = multiprocessing.Pool()
+    pool.map(copy_files, all_files)

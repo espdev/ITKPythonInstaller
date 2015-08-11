@@ -1,0 +1,49 @@
+# coding=utf-8
+
+"""
+Setup script for ITK Python wrappings
+
+"""
+
+from setuptools import setup
+from setuptools.dist import Distribution
+
+__version__ = "@ITK_PACKAGE_VERSION@"
+
+long_description = """ITK is an open-source, cross-platform system that provides
+developers with an extensive suite of software tools for image analysis.
+Developed through extreme programming methodologies, ITK employs leading-edge
+algorithms for registering and segmenting multidimensional data. The goals for
+ITK include:
+
+    - Supporting the Visible Human Project.
+    - Establishing a foundation for future research.
+    - Creating a repository of fundamental algorithms.
+    - Developing a platform for advanced product development.
+    - Support commercial application of the technology.
+    - Create conventions for future work.
+    - Grow a self-sustaining community of software users and developers.
+"""
+
+
+class BinaryDistribution(Distribution):
+    def is_pure(self):
+        return False
+
+
+setup(
+    name='itk',
+    version=__version__,
+    description='Insight Segmentation and Registration Toolkit (ITK)',
+    long_description=long_description,
+    author='Insight Software Consortium',
+    url='http://www.itk.org',
+    license='Apache License 2.0',
+    packages=['itk'],
+    include_package_data=True,
+    package_data={
+        '': ['*.py', '*.pyd', '*.dll', '*.so'],
+        'itk': ['Configuration/*.py', '../itk.pth']
+    },
+    distclass=BinaryDistribution,
+)
