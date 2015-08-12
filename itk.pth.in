@@ -1,1 +1,5 @@
+# Add itk folder (it is not a package) to sys.path
 ./itk
+
+# Add version info to itk "package"
+import itk; itk.__version__ = '@ITK_PACKAGE_VERSION@';
