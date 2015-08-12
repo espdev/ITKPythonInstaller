@@ -56,7 +56,7 @@ add_custom_target(pip_install ALL
 
 # Uninstall package from python site-packages
 add_custom_target(pip_uninstall
-    COMMAND ${PYTHON_EXECUTABLE} "-m" "pip" "uninstall" "itk"
+    COMMAND ${PYTHON_EXECUTABLE} "-m" "pip" "uninstall" "--yes" "itk"
 )
 
 set(GLOB_COPY_FILES
