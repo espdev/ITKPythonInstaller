@@ -16,13 +16,15 @@ project(ITKPythonInstaller)
 find_package(ITK REQUIRED)
 
 if (NOT ${ITK_WRAP_PYTHON})
-    message(FATAL_ERROR "Python wrappings are disabled in ITK '${ITK_DIR}'")
+    message(FATAL_ERROR
+        "Python wrappings are disabled in ITK build '${ITK_DIR}'.\n"
+        "You should enable 'ITK_WRAP_PYTHON' option and rebuild ITK."
+    )
 endif()
 
 set(ITK_PACKAGE_VERSION "${ITK_VERSION_MAJOR}.${ITK_VERSION_MINOR}.${ITK_VERSION_PATCH}")
 
 find_package(PythonInterp ${ITK_WRAP_PYTHON_VERSION} EXACT REQUIRED)
-
 
 set(TARGET_DIR ${CMAKE_BINARY_DIR}/ITKPython)
 
