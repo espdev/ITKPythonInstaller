@@ -24,7 +24,10 @@ endif()
 
 set(ITK_PACKAGE_VERSION "${ITK_VERSION_MAJOR}.${ITK_VERSION_MINOR}.${ITK_VERSION_PATCH}")
 
-find_package(PythonInterp ${ITK_WRAP_PYTHON_VERSION} EXACT REQUIRED)
+string(REGEX MATCH "^[2-3]\\.[0-9]+"
+    python_version_major_minor ${ITK_WRAP_PYTHON_VERSION})
+
+find_package(PythonInterp ${python_version_major_minor} EXACT REQUIRED)
 
 set(TARGET_DIR ${CMAKE_BINARY_DIR}/ITKPython)
 
