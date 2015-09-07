@@ -38,21 +38,16 @@ set(DST_ITK_DIR "${DST_DIR}/itk")
 
 set(COPY_FILES_COMMAND "${TARGET_DIR}/copy_files.py")
 
-# Copying the necessary files
-add_custom_target(copy_files ALL
+# Copying the necessary files and building wheel package
+add_custom_target(pip_wheel ALL
     COMMAND ${PYTHON_EXECUTABLE} ${COPY_FILES_COMMAND} "${ITK_DIR}/lib" "${DST_ITK_DIR}"
     COMMAND ${PYTHON_EXECUTABLE} ${COPY_FILES_COMMAND} "${ITK_DIR}/lib/$(Configuration)" "${DST_ITK_DIR}"
     COMMAND ${PYTHON_EXECUTABLE} ${COPY_FILES_COMMAND} "${ITK_DIR}/bin/$(Configuration)" "${DST_ITK_DIR}"
     COMMAND ${PYTHON_EXECUTABLE} ${COPY_FILES_COMMAND} "${ITK_DIR}/Wrapping/Generators/Python/$(Configuration)" "${DST_ITK_DIR}"
     COMMAND ${PYTHON_EXECUTABLE} ${COPY_FILES_COMMAND} "${ITK_DIR}/Wrapping/Generators/Python/Configuration" "${DST_ITK_DIR}/Configuration"
     COMMAND ${PYTHON_EXECUTABLE} ${COPY_FILES_COMMAND} "${ITK_DIR}/Wrapping/Generators/Python/InstallOnly" "${DST_ITK_DIR}"
-)
-
-# Building wheel package
-add_custom_target(pip_wheel ALL
     COMMAND ${PYTHON_EXECUTABLE} "-m" "pip" "wheel" "--wheel-dir" "${CMAKE_BINARY_DIR}/bin" "."
     WORKING_DIRECTORY "${DST_DIR}"
-    DEPENDS copy_files
 )
 
 # Install package to python site-packages
