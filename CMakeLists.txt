@@ -31,28 +31,27 @@ string(REGEX MATCH "^[2-3]\\.[0-9]+"
 
 find_package(PythonInterp ${python_version_major_minor} EXACT REQUIRED)
 
-set(TARGET_DIR ${CMAKE_BINARY_DIR}/ITKPython)
-
-set(DST_DIR "${TARGET_DIR}/src")
-set(DST_ITK_DIR "${DST_DIR}/itk")
+set(TARGET_DIR "${CMAKE_BINARY_DIR}/lib")
+set(TARGET_ITK_DIR "${TARGET_DIR}/itk")
+set(WHEEL_DIR "${CMAKE_BINARY_DIR}/wheelhouse")
 
 set(COPY_FILES_COMMAND "${TARGET_DIR}/copy_files.py")
 
 # Copying the necessary files and building wheel package
 add_custom_target(pip_wheel ALL
-    COMMAND ${PYTHON_EXECUTABLE} ${COPY_FILES_COMMAND} "${ITK_DIR}/lib" "${DST_ITK_DIR}"
-    COMMAND ${PYTHON_EXECUTABLE} ${COPY_FILES_COMMAND} "${ITK_DIR}/lib/$(Configuration)" "${DST_ITK_DIR}"
-    COMMAND ${PYTHON_EXECUTABLE} ${COPY_FILES_COMMAND} "${ITK_DIR}/bin/$(Configuration)" "${DST_ITK_DIR}"
-    COMMAND ${PYTHON_EXECUTABLE} ${COPY_FILES_COMMAND} "${ITK_DIR}/Wrapping/Generators/Python/$(Configuration)" "${DST_ITK_DIR}"
-    COMMAND ${PYTHON_EXECUTABLE} ${COPY_FILES_COMMAND} "${ITK_DIR}/Wrapping/Generators/Python/Configuration" "${DST_ITK_DIR}/Configuration"
-    COMMAND ${PYTHON_EXECUTABLE} ${COPY_FILES_COMMAND} "${ITK_DIR}/Wrapping/Generators/Python/InstallOnly" "${DST_ITK_DIR}"
-    COMMAND ${PYTHON_EXECUTABLE} "-m" "pip" "wheel" "--wheel-dir" "${CMAKE_BINARY_DIR}/bin" "."
-    WORKING_DIRECTORY "${DST_DIR}"
+    COMMAND ${PYTHON_EXECUTABLE} ${COPY_FILES_COMMAND} "${ITK_DIR}/lib" "${TARGET_ITK_DIR}"
+    COMMAND ${PYTHON_EXECUTABLE} ${COPY_FILES_COMMAND} "${ITK_DIR}/lib/$(Configuration)" "${TARGET_ITK_DIR}"
+    COMMAND ${PYTHON_EXECUTABLE} ${COPY_FILES_COMMAND} "${ITK_DIR}/bin/$(Configuration)" "${TARGET_ITK_DIR}"
+    COMMAND ${PYTHON_EXECUTABLE} ${COPY_FILES_COMMAND} "${ITK_DIR}/Wrapping/Generators/Python/$(Configuration)" "${TARGET_ITK_DIR}"
+    COMMAND ${PYTHON_EXECUTABLE} ${COPY_FILES_COMMAND} "${ITK_DIR}/Wrapping/Generators/Python/Configuration" "${TARGET_ITK_DIR}/Configuration"
+    COMMAND ${PYTHON_EXECUTABLE} ${COPY_FILES_COMMAND} "${ITK_DIR}/Wrapping/Generators/Python/InstallOnly" "${TARGET_ITK_DIR}"
+    COMMAND ${PYTHON_EXECUTABLE} "-m" "pip" "wheel" "--wheel-dir" "${WHEEL_DIR}" "."
+    WORKING_DIRECTORY "${TARGET_DIR}"
 )
 
 # Install package to python site-packages
 add_custom_target(pip_install ALL
-    COMMAND ${PYTHON_EXECUTABLE} "-m" "pip" "install" "-U" "--force-reinstall" "--no-index" "--find-links" "${CMAKE_BINARY_DIR}/bin" "itk"
+    COMMAND ${PYTHON_EXECUTABLE} "-m" "pip" "install" "-U" "--force-reinstall" "--no-index" "--find-links" "${WHEEL_DIR}" "itk"
     DEPENDS pip_wheel
 )
 
@@ -66,7 +65,7 @@ set(GLOB_COPY_FILES
     "*.pyd"
 )
 
-if (INCLUDE_ITK_SHARED_LIBRARIES)
+if(INCLUDE_ITK_SHARED_LIBRARIES)
     list(APPEND GLOB_COPY_FILES
         "*.dll"
         "*.so"
@@ -81,12 +80,12 @@ configure_file(
 
 configure_file(
     ${CMAKE_SOURCE_DIR}/setup.py.in
-    ${DST_DIR}/setup.py
+    ${TARGET_DIR}/setup.py
     @ONLY
 )
 
 configure_file(
     ${CMAKE_SOURCE_DIR}/itk.pth.in
-    ${DST_DIR}/itk.pth
+    ${TARGET_DIR}/itk.pth
     @ONLY
 )
