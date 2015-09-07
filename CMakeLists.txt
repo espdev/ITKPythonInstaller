@@ -22,6 +22,8 @@ if (NOT ${ITK_WRAP_PYTHON})
     )
 endif()
 
+option(INCLUDE_ITK_SHARED_LIBRARIES "Include ITK shared libraries to wheel package" ON)
+
 set(ITK_PACKAGE_VERSION "${ITK_VERSION_MAJOR}.${ITK_VERSION_MINOR}.${ITK_VERSION_PATCH}")
 
 string(REGEX MATCH "^[2-3]\\.[0-9]+"
@@ -67,9 +69,14 @@ add_custom_target(pip_uninstall
 set(GLOB_COPY_FILES
     "*.py"
     "*.pyd"
-    "*.dll"
-    "*.so"
 )
+
+if (INCLUDE_ITK_SHARED_LIBRARIES)
+    list(APPEND GLOB_COPY_FILES
+        "*.dll"
+        "*.so"
+    )
+endif()
 
 configure_file(
     ${CMAKE_SOURCE_DIR}/copy_files.py.in
