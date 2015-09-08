@@ -22,7 +22,7 @@ if (NOT ${ITK_WRAP_PYTHON})
     )
 endif()
 
-option(INCLUDE_ITK_SHARED_LIBRARIES "Include ITK shared libraries to wheel package" ON)
+option(INCLUDE_ITK_SHARED_LIBS "Include ITK shared libraries to wheel package" ON)
 
 set(ITK_PACKAGE_VERSION "${ITK_VERSION_MAJOR}.${ITK_VERSION_MINOR}.${ITK_VERSION_PATCH}")
 
@@ -65,7 +65,7 @@ set(GLOB_COPY_FILES
     "*.pyd"
 )
 
-if(INCLUDE_ITK_SHARED_LIBRARIES)
+if(INCLUDE_ITK_SHARED_LIBS)
     list(APPEND GLOB_COPY_FILES
         "*.dll"
         "*.so"
