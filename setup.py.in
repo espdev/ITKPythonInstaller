@@ -25,6 +25,8 @@ ITK include:
     - Grow a self-sustaining community of software users and developers.
 """
 
+GLOBS = ['itk/'+glob for glob in '@GLOB_COPY_FILES@'.split(';')]
+
 
 class BinaryDistribution(Distribution):
     def is_pure(self):
@@ -42,8 +44,8 @@ setup(
     packages=['itk'],
     include_package_data=True,
     package_data={
-        '': '@GLOB_COPY_FILES@'.split(';'),
-        'itk': ['Configuration/*.py', '../itk.pth']
+        'itk': GLOBS + ['itk/Configuration/*.py'],
+        '': ['*.py', '../itk.pth'],
     },
     distclass=BinaryDistribution,
 )
