@@ -33,18 +33,22 @@ find_package(PythonInterp ${python_version_major_minor} EXACT REQUIRED)
 
 set(TARGET_DIR "${CMAKE_BINARY_DIR}/lib")
 set(TARGET_ITK_DIR "${TARGET_DIR}/itk")
+set(PACKAGE_ITK_DIR "${TARGET_DIR}/itk/itk")
 set(WHEEL_DIR "${CMAKE_BINARY_DIR}/wheelhouse")
 
 set(COPY_FILES_COMMAND "${TARGET_DIR}/copy_files.py")
 
 # Copying the necessary files and building wheel package
 add_custom_target(pip_wheel ALL
-    COMMAND ${PYTHON_EXECUTABLE} ${COPY_FILES_COMMAND} "${ITK_DIR}/lib" "${TARGET_ITK_DIR}"
-    COMMAND ${PYTHON_EXECUTABLE} ${COPY_FILES_COMMAND} "${ITK_DIR}/lib/$(Configuration)" "${TARGET_ITK_DIR}"
-    COMMAND ${PYTHON_EXECUTABLE} ${COPY_FILES_COMMAND} "${ITK_DIR}/bin/$(Configuration)" "${TARGET_ITK_DIR}"
+    COMMAND ${PYTHON_EXECUTABLE} ${COPY_FILES_COMMAND} "${ITK_DIR}/lib" "${PACKAGE_ITK_DIR}"
+    COMMAND ${PYTHON_EXECUTABLE} ${COPY_FILES_COMMAND} "${ITK_DIR}/lib/$(Configuration)" "${PACKAGE_ITK_DIR}"
+    COMMAND ${PYTHON_EXECUTABLE} ${COPY_FILES_COMMAND} "${ITK_DIR}/bin/$(Configuration)" "${PACKAGE_ITK_DIR}"
+    COMMAND ${PYTHON_EXECUTABLE} ${COPY_FILES_COMMAND} "${ITK_DIR}/Wrapping/Generators/Python" "${TARGET_ITK_DIR}"
     COMMAND ${PYTHON_EXECUTABLE} ${COPY_FILES_COMMAND} "${ITK_DIR}/Wrapping/Generators/Python/$(Configuration)" "${TARGET_ITK_DIR}"
-    COMMAND ${PYTHON_EXECUTABLE} ${COPY_FILES_COMMAND} "${ITK_DIR}/Wrapping/Generators/Python/Configuration" "${TARGET_ITK_DIR}/Configuration"
+    COMMAND ${PYTHON_EXECUTABLE} ${COPY_FILES_COMMAND} "${ITK_DIR}/Wrapping/Generators/Python/$(Configuration)/itk" "${PACKAGE_ITK_DIR}"
+    COMMAND ${PYTHON_EXECUTABLE} ${COPY_FILES_COMMAND} "${ITK_DIR}/Wrapping/Generators/Python/Configuration" "${PACKAGE_ITK_DIR}/Configuration"
     COMMAND ${PYTHON_EXECUTABLE} ${COPY_FILES_COMMAND} "${ITK_DIR}/Wrapping/Generators/Python/InstallOnly" "${TARGET_ITK_DIR}"
+    COMMAND ${CMAKE_COMMAND} -E remove ${TARGET_ITK_DIR}/itk.py
     COMMAND ${PYTHON_EXECUTABLE} "-m" "pip" "wheel" "--wheel-dir" "${WHEEL_DIR}" "."
     WORKING_DIRECTORY "${TARGET_DIR}"
 )
