@@ -30,6 +30,9 @@ class BinaryDistribution(Distribution):
     def is_pure(self):
         return False
 
+    def has_ext_modules(self):
+        return True
+
 
 setup(
     name='itk',
